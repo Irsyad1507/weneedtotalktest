@@ -1,0 +1,1 @@
+document.getElementById('demo').innerHTML = 'Made in JavaScript';
