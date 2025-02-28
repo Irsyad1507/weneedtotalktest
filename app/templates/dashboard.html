@@ -66,7 +66,7 @@
         
         </div>
         <div class="col-4">
-            {% if current_user.profile_picture %}
+            {% if current_user.profile_picture and pfp_exists %}
 
             <img src="{{ url_for('static', filename='images/' + current_user.profile_picture) }}" alt="your-profile-picture" width="150" align="right">
 

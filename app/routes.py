@@ -104,22 +104,27 @@ def dashboard():
             
             # Save to db as string
             name_to_update.profile_picture = picture_name
+            pfp_exists = os.path.exists(os.path.join(app.config['UPLOAD_FOLDER'], picture_name))
             try:
                 db.session.commit()
                 saved.save(os.path.join(app.config['UPLOAD_FOLDER'], picture_name))
+                pfp_exists = True
                 flash('User Updated Successfully')
                 return render_template('dashboard.html', 
                                     form=form, 
-                                    name_to_update=name_to_update)
+                                    name_to_update=name_to_update, 
+                                    pfp_exists=pfp_exists)
             except:
+                pfp_exists = False
                 flash('Error Updating User')
                 return render_template('dashboard.html', 
                                     form=form, 
-                                    name_to_update=name_to_update)
+                                    name_to_update=name_to_update, 
+                                    pfp_exists=pfp_exists)
         else:
             db.session.commit()
             flash('User Updated Successfully')
-            return render_template('dashboard.html', form=form, name_to_update=name_to_update)
+            return render_template('dashboard.html', form=form, name_to_update=name_to_update, pfp_exists=pfp_exists)
     else:
         return render_template('dashboard.html', 
                                    form=form, 
