@@ -26,7 +26,7 @@ def admin():
     if id == 1:
         return render_template("admin.html")
     else:
-        flash("Only real admin can access the admin page")
+        flash("Only real admin can access the admin page", "danger")
         return redirect(url_for('posts'))
 
 
@@ -57,12 +57,12 @@ def login():
             # Check Hash
             if check_password_hash(user.password_hash, form.password.data):
                 login_user(user)
-                flash('Login Successful!')
+                flash('Login Successful!', 'success')
                 return redirect(url_for('dashboard'))
             else:
-                flash('Wrong Password')
+                flash('Wrong Password', 'danger')
         else:
-            flash("Username Doesn't Exist")
+            flash("Username Doesn't Exist", 'danger')
 
 
     return render_template('login.html', form=form)
@@ -72,7 +72,7 @@ def login():
 @login_required
 def logout():
     logout_user()
-    flash("You've been logged out")
+    flash("You've been logged out", 'info')
     return redirect(url_for('login'))
 
 # Create Dashboard Page
@@ -109,21 +109,21 @@ def dashboard():
                 db.session.commit()
                 saved.save(os.path.join(app.config['UPLOAD_FOLDER'], picture_name))
                 pfp_exists = True
-                flash('User Updated Successfully')
+                flash('User Updated Successfully', 'success')
                 return render_template('dashboard.html', 
                                     form=form, 
                                     name_to_update=name_to_update, 
                                     pfp_exists=pfp_exists)
             except:
                 pfp_exists = False
-                flash('Error Updating User')
+                flash('Error Updating User', 'danger')
                 return render_template('dashboard.html', 
                                     form=form, 
                                     name_to_update=name_to_update, 
                                     pfp_exists=pfp_exists)
         else:
             db.session.commit()
-            flash('User Updated Successfully')
+            flash('User Updated Successfully', 'success')
             return render_template('dashboard.html', form=form, name_to_update=name_to_update, pfp_exists=pfp_exists)
     else:
         return render_template('dashboard.html', 
@@ -149,16 +149,16 @@ def delete_post(id):
             db.session.commit()
 
             # Return message
-            flash('Post Deleted')
+            flash('Post Deleted', 'success')
             return redirect(url_for('posts'))
 
         except:
             # Return error message
-            flash('Failed to delete')
+            flash('Failed to delete', 'danger')
             return redirect(url_for('posts'))
     else:
         # Return message
-        flash("You cannot delete someone else's post...")
+        flash("You cannot delete someone else's post...", 'danger')
         return redirect(url_for('posts'))
 
 @app.route('/posts')
@@ -185,7 +185,7 @@ def edit_post(id):
         # Update data
         db.session.add(post)
         db.session.commit()
-        flash('Post Updated')
+        flash('Post Updated', 'success')
         return redirect(url_for('post', id=post.id))
     
     if current_user.id == post.poster.id or current_user.id == 16:
@@ -195,7 +195,7 @@ def edit_post(id):
         form.content.data = post.content
         return render_template('edit_post.html', form=form)
     else:
-        flash("You cannot edit someone else's post...")
+        flash("You cannot edit someone else's post...", 'danger')
         return redirect(url_for('posts'))
 
 
@@ -220,7 +220,7 @@ def add_post():
         db.session.commit()
 
         # Return Message
-        flash('Post Submitted Successfully!')
+        flash('Post Submitted Successfully!', 'success')
 
     # Redirect to webpage
     return render_template('add_post.html', form=form)
@@ -238,14 +238,14 @@ def delete(id):
         try:
             db.session.delete(user_to_delete)
             db.session.commit()
-            flash('User Deleted!')
+            flash('User Deleted!', 'success')
             return redirect(url_for('add_user'))
 
         except:
-            flash('Error deleting user')
+            flash('Error deleting user', 'danger')
             return redirect(url_for('add_user'))
     else:
-        flash('You cannot delete someone else...')
+        flash('You cannot delete someone else...', 'danger')
         return redirect(url_for("add_user"))
 
 # Update Database Record
@@ -261,12 +261,12 @@ def update(id):
         name_to_update.username = request.form.get('username')
         try:
             db.session.commit()
-            flash('User Updated Successfully')
+            flash('User Updated Successfully', 'success')
             return render_template('update.html', 
                                    form=form, 
                                    name_to_update=name_to_update, id=id)
         except:
-            flash('Error Updating User')
+            flash('Error Updating User', 'danger')
             return render_template('update.html', 
                                    form=form, 
                                    name_to_update=name_to_update, 
@@ -312,7 +312,7 @@ def add_user():
         form.favourite_colour.data = ''
         form.password_hash.data = ''
 
-        flash("User Added Successfully!")
+        flash("User Added Successfully!", "success")
     users = User.query.order_by(User.date_added)
     return render_template("add_user.html", 
                            form=form, 
@@ -322,14 +322,8 @@ def add_user():
 # Create route decorator
 @app.route('/')
 def index():
-    first_name = "Rick"
-    stuff = "This is bold text"
-    flash("Welcome to our website!")
-    items = [1, 2, 3, "SAJE"]
-    return render_template("index.html", 
-                           first_name=first_name, 
-                           stuff=stuff, 
-                           items=items)
+    flash("Welcome to our website!", "info")
+    return render_template("index.html")
 
 # Create custom error pages
 

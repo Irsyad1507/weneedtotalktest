@@ -1,38 +1,20 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% for message in get_flashed_messages() %}
+    {% for category,  message in get_flashed_messages(with_categories=true) %}
 
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
+    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
         {{ message }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
 
 
     {% endfor %}
-    <h1>Hello World!</h1>
+    <h1>We Need to Talk</h1>
 
-    <p>This is my first webpage!!!</p>
-
-    <p>My name is {{ first_name }}</p>
-
-    <p>{{stuff| title}}</p>
-
-    <h3>Items:</h3>
-
-    {% for item in items %}
-
-        {% if item == 3 %}
-            {{ item|string * 3 }}<br/>
-        {% else %}
-            {{ item }}<br/>
-        {% endif %}
-
-
-    {% endfor %}
-
-    <br/><br/>
-    {{ items.3|reverse }}
+    <p>Welcome to We Need to Talk, where we discuss any issue that we think need to be talked about. Write your post here, publish, and let the world know how important the issue is.
+    But hold on, because we have some guidelines that you need to follow.</p><br/>
+    <p>1. You must start your blog title with 'We need to talk about... '. <a href="https://">Here</a>'s the starter template for you.</p>
 
 
 {% endblock %}
